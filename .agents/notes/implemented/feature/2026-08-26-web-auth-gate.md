@@ -12,12 +12,12 @@ identity before opening sessions or connect a future remote account service.
 ## Decision
 
 The `apps/web` entry mounts a login/register gate before `AppWebEntry` and shows
-the authenticated user's name with a logout action. It calls a configurable
-`VITE_AUTH_API_URL` using cookie credentials and expects `/register`, `/login`,
-`/me`, and `/logout` endpoints. Until that service exists, network, 404, and 503
-responses use a browser-local development store with SHA-256 password hashes.
-The server-only `AUTH_DATABASE_URL` location is documented in `.env.example`;
-the browser never receives that value.
+the authenticated user's name with a logout action. The `dsh-web-app` host
+plugin serves the `/register`, `/login`, `/me`, and `/logout` endpoints from
+PostgreSQL configured by server-only `AUTH_DATABASE_URL`, with hashed passwords
+and HttpOnly sessions. Until that service is configured, network, 404, and 503
+responses use a browser-local development store with SHA-256 password hashes;
+the browser never receives the database URL.
 
 ## Alternatives considered
 
@@ -30,6 +30,6 @@ before deployment wiring is complete.
 
 ## Consequences
 
-Deployments must provide the documented HTTP authentication endpoints for
-production identity storage. The local fallback is intentionally non-production
-and is replaced automatically when the remote API responds.
+Deployments must provide `AUTH_DATABASE_URL` and allow the Web process to reach
+PostgreSQL. The local fallback is intentionally non-production and is replaced
+automatically when the remote API responds.

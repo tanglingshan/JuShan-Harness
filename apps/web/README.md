@@ -24,3 +24,14 @@ session and must enforce account ownership on the server.
 Until the API is deployed, network/404 responses use a browser-local
 development account store so the UI can be exercised. This fallback is not a
 production identity store.
+
+The shipped `dsh-web-app` bundle includes `auth-schema.sql` and applies it on
+startup when `AUTH_DATABASE_URL` is present. You can also apply it manually:
+
+```sh
+psql "$AUTH_DATABASE_URL" -f packages/bundle/web-app/auth-schema.sql
+```
+
+The schema creates `auth_users`, `auth_sessions`, and `auth_api_keys`. API key
+secrets are stored as SHA-256 hashes; only the metadata list is returned after
+creation.
