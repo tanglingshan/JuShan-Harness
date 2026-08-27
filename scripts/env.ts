@@ -125,7 +125,9 @@ function positionals(args: readonly string[]): string[] {
       if (argument !== '--force') index += 1
       continue
     }
-    values.push(argument)
+    if (argument !== undefined) {
+      values.push(argument)
+    }
   }
   return values
 }
