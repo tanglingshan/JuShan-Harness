@@ -1,0 +1,5 @@
+export { LoginForm } from './LoginForm'
+export { RegisterForm } from './RegisterForm'
+export { UserAvatar } from './UserAvatar'
+export { UserProfile } from './UserProfile'
+export { ProtectedRoute } from './ProtectedRoute'
