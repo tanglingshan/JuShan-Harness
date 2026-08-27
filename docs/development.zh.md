@@ -104,6 +104,8 @@ DEEPSEEK_BASE_URL=https://... # optional
 
 `DEEPSEEK_BASE_URL` 可选，默认为公开 API。请勿提交真实凭证。未设置 `DEEPSEEK_API_KEY` 时，真实 API 的 e2e 套件会自动跳过。
 
+使用 `pnpm run env -- check` 校验根目录文件且不打印值。`pnpm run env -- list` 只输出变量名；`init`、`set` 和 `unset` 可管理文件并保持严格权限。`PATH`、`DSH_HOME` 和 `DEEPSEEK_BASE_URL` 等仅允许启动环境提供的变量必须通过调用环境导出，不能写入 `.env`。
+
 ### Git 集成
 
 当两种语言的文件都使用 Git 默认文本策略且能干净合并时，配对合并驱动会根据已确认的祖先、当前和另一侧的配对文档 blob，推导出发生冲突的 `.i18n.yaml` 记录。配对文档发生冲突、存在非文本合并配置或记录无效时，它会拒绝处理并保留冲突；如果合并已经因冲突而停止，请运行 `pnpm run resolve-translation-pairing-conflicts`，该命令会暂存每份可安全生成的配对记录；如果其他配对冲突仍需手工处理，则以非零状态退出。[双语文档约定](i18n/README.zh.md#the-pairing-contract)列出该驱动接受的确切文件和状态。

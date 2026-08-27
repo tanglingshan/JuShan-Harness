@@ -100,6 +100,8 @@ DEEPSEEK_BASE_URL=https://... # optional
 
 `DEEPSEEK_BASE_URL` is optional and defaults to the public API. Never commit real credentials. The real-API e2e suites self-skip when `DEEPSEEK_API_KEY` is not set.
 
+Use `pnpm run env -- check` to validate the root file without printing values. `pnpm run env -- list` prints names only; `init`, `set`, and `unset` manage a file while preserving restrictive permissions. Launch-only variables such as `PATH`, `DSH_HOME`, and `DEEPSEEK_BASE_URL` must be exported by the invoking environment instead of written to `.env`.
+
 ### Git integrations
 
 The pairing merge driver derives a conflicted `.i18n.yaml` record from the confirmed ancestor, current, and other owner blobs when both language files use Git's default text strategy and merge cleanly. It fails closed on owner conflicts, non-text merge configuration, or invalid records; after an already-stopped merge, run `pnpm run resolve-translation-pairing-conflicts`, which stages every safe pairing record and exits unsuccessfully if other pairing conflicts still need manual work. See the [bilingual documentation contract](i18n/README.md#the-pairing-contract) for the exact files and states the driver accepts.
