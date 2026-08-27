@@ -4,7 +4,7 @@
  */
 
 import { randomUUID } from 'node:crypto'
-import type { DatabaseSync } from 'node:sqlite'
+import type { DatabaseSync, SQLInputValue } from 'node:sqlite'
 import type {
   User,
   CreateUserParams,
@@ -116,7 +116,7 @@ export class UserStore {
    */
   updateUser(params: UpdateUserParams): User {
     const updates: string[] = []
-    const values: unknown[] = []
+    const values: SQLInputValue[] = []
 
     if (params.email !== undefined) {
       updates.push('email = ?')
@@ -194,7 +194,7 @@ export class UserStore {
     const sortOrder = query.sortOrder ?? 'desc'
 
     let whereClause = ''
-    const whereParams: unknown[] = []
+    const whereParams: SQLInputValue[] = []
 
     if (query.status !== undefined) {
       whereClause = 'WHERE status = ?'

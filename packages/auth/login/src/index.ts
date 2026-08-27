@@ -4,7 +4,7 @@
  */
 
 export * from './types.ts'
-export { LoginService, type LoginConfig } from './service.ts'
+export { LoginService } from './service.ts'
 export { JwtManager } from './jwt.ts'
 export { SessionManager } from './session.ts'
 export { default } from './service.ts'

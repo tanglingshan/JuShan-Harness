@@ -179,7 +179,7 @@ export class SessionManager {
       WHERE user_id = ? AND status = 'active'
     `).run(userId)
 
-    return result.changes
+    return Number(result.changes)
   }
 
   /**
@@ -211,7 +211,7 @@ export class SessionManager {
       WHERE status = 'active' AND expires_at < ?
     `).run(now)
 
-    return result.changes
+    return Number(result.changes)
   }
 
   /**

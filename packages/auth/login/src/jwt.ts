@@ -37,7 +37,7 @@ export class JwtManager {
    */
   generateAccessToken(payload: Omit<JwtPayload, 'iat' | 'exp'>): string {
     return jwt.sign(payload, this.secret, {
-      expiresIn: this.expiresIn,
+      expiresIn: this.getExpiresInSeconds(),
       algorithm: 'HS256',
       issuer: this.issuer,
       audience: this.audience,
@@ -100,12 +100,13 @@ export class JwtManager {
    */
   parseExpiresIn(expiresIn: string): number {
     const match = expiresIn.match(/^(\d+)([smhd])$/)
-    if (!match) {
+    const valueText = match?.[1]
+    const unit = match?.[2]
+    if (valueText === undefined || unit === undefined) {
       throw new Error(`Invalid expiresIn format: ${expiresIn}`)
     }
 
-    const value = parseInt(match[1], 10)
-    const unit = match[2]
+    const value = parseInt(valueText, 10)
 
     switch (unit) {
       case 's': return value

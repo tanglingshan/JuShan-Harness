@@ -41,17 +41,14 @@ export class UserService extends Service {
   private store!: UserStore
 
   constructor(ctx: Context, config?: UserConfig) {
-    super(ctx, 'user', true)
+    super(ctx, 'user')
 
-    // Initialize store with database from context or config
-    ctx.on('ready', async () => {
-      const db = config?.database ?? (ctx as unknown as { database?: DatabaseSync }).database
-      if (!db) {
-        throw new Error('UserService requires a database instance')
-      }
-      this.store = new UserStore(db)
-      await this.initializeDatabase(db)
-    })
+    const db = config?.database ?? (ctx as unknown as { database?: DatabaseSync }).database
+    if (!db) {
+      throw new Error('UserService requires a database instance')
+    }
+    this.store = new UserStore(db)
+    void this.initializeDatabase(db)
   }
 
   /**

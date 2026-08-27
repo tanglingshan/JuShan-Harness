@@ -5,6 +5,7 @@
 
 import type { Context } from '@deepseek-ai/cordis'
 import { Service } from '@deepseek-ai/cordis'
+import type {} from '@deepseek-ai/dsh-auth-user'
 import bcrypt from 'bcrypt'
 import { validateRegisterParams } from './validator.ts'
 import type { RegisterParams, RegisterResult } from './types.ts'
@@ -39,7 +40,7 @@ export class RegistrationService extends Service {
   private config: Required<RegistrationConfig>
 
   constructor(ctx: Context, config?: RegistrationConfig) {
-    super(ctx, 'registration', true)
+    super(ctx, 'registration')
     this.config = { ...DEFAULT_CONFIG, ...config }
   }
 
@@ -141,10 +142,10 @@ export class RegistrationService extends Service {
       })
     }
 
-    return {
-      valid: errors.length === 0,
-      errors: errors.length > 0 ? errors : undefined,
+    if (errors.length > 0) {
+      return { valid: false, errors }
     }
+    return { valid: true }
   }
 }
 

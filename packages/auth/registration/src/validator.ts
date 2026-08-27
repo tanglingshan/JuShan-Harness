@@ -3,7 +3,7 @@
  * @module @deepseek-ai/dsh-auth-registration/validator
  */
 
-import { Schema } from '@deepseek-ai/schemastery'
+import Schema from '@deepseek-ai/schemastery'
 import type { RegisterParams } from './types.ts'
 
 /**
@@ -39,7 +39,7 @@ export const RegisterSchema = Schema.object({
  */
 export function validateRegisterParams(params: unknown): RegisterParams {
   try {
-    return RegisterSchema(params) as RegisterParams
+    return RegisterSchema(params as RegisterParams)
   } catch (error: unknown) {
     // Wrap schema validation error with AUTH_VALIDATION_ERROR code
     const validationError = new Error('AUTH_VALIDATION_ERROR')

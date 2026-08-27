@@ -6,6 +6,7 @@
 import { randomUUID } from 'node:crypto'
 import type { Context } from '@deepseek-ai/cordis'
 import { Service } from '@deepseek-ai/cordis'
+import type {} from '@deepseek-ai/dsh-auth-user'
 import type { DatabaseSync } from 'node:sqlite'
 import bcrypt from 'bcrypt'
 import { JwtManager } from './jwt.ts'
@@ -43,7 +44,7 @@ export class LoginService extends Service {
   private config!: Required<LoginConfig>
 
   constructor(ctx: Context, config: LoginConfig) {
-    super(ctx, 'login', true)
+    super(ctx, 'login')
 
     if (!config.jwtSecret) {
       throw new Error('LoginService requires jwtSecret in config')
@@ -51,22 +52,18 @@ export class LoginService extends Service {
 
     this.config = { ...DEFAULT_CONFIG, ...config }
 
-    ctx.on('ready', () => {
-      const db = (ctx as unknown as { database?: DatabaseSync }).database as DatabaseSync
-      if (!db) {
-        throw new Error('LoginService requires a database instance')
-      }
+    const db = (ctx as unknown as { database?: DatabaseSync }).database
+    if (!db) {
+      throw new Error('LoginService requires a database instance')
+    }
 
-      this.jwtManager = new JwtManager(
-        this.config.jwtSecret,
-        this.config.jwtExpiresIn,
-        this.config.jwtRefreshExpiresIn,
-      )
-      this.sessionManager = new SessionManager(db, this.jwtManager)
-
-      // Start periodic session cleanup
-      this.startSessionCleanup()
-    })
+    this.jwtManager = new JwtManager(
+      this.config.jwtSecret,
+      this.config.jwtExpiresIn,
+      this.config.jwtRefreshExpiresIn,
+    )
+    this.sessionManager = new SessionManager(db, this.jwtManager)
+    this.startSessionCleanup()
   }
 
   /**
@@ -279,9 +276,7 @@ export class LoginService extends Service {
 
     // Schedule periodic cleanup
     const interval = setInterval(cleanup, CLEANUP_INTERVAL)
-
-    // Clean up on service disposal
-    this.ctx.on('dispose', () => {
+    this.ctx.effect(() => () => {
       clearInterval(interval)
     })
   }
